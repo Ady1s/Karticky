@@ -8,40 +8,41 @@ import { FlashcardService, Flashcard } from './services/flashcard.service';
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['./app.component.css'],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div class="container mx-auto px-4 py-12 max-w-5xl">
+    <div class="app-container">
+      <div class="container">
         <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl font-bold text-indigo-900 mb-2">Anglické kartičky</h1>
-          <p class="text-gray-600">Napište překlad a zkontrolujte svou odpověď</p>
+        <div class="header">
+          <h1>Anglické kartičky</h1>
+          <p>Napište překlad a zkontrolujte svou odpověď</p>
         </div>
 
         <!-- Přidání nového slovíčka -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-12">
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="flex-1">
-              <label class="block text-sm font-medium text-gray-700 mb-2">České slovo</label>
+        <div class="new-card-container">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">České slovo</label>
               <input
                 [(ngModel)]="newCzech"
                 placeholder="Zadejte české slovo..."
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                class="form-input"
               />
             </div>
-            <div class="flex-1">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Anglické slovo</label>
+            <div class="form-group">
+              <label class="form-label">Anglické slovo</label>
               <input
                 [(ngModel)]="newEnglish"
                 placeholder="Zadejte anglické slovo..."
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                class="form-input"
               />
             </div>
-            <div class="flex items-end">
+            <div class="button-container">
               <button
                 (click)="addCard()"
-                class="w-full md:w-auto px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors duration-200 flex items-center justify-center gap-2"
+                class="btn btn-primary btn-normal"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 Přidat
@@ -49,71 +50,72 @@ import { FlashcardService, Flashcard } from './services/flashcard.service';
             </div>
           </div>
         </div>
-        <div class="flex flex-wrap gap-4 items-end">
-  <div class="flex-1">
-    <label class="block text-sm font-medium text-gray-700 mb-2">CSV Soubor</label>
-    <input
-      type="file"
-      accept=".csv"
-      (change)="importFromCsv($event)"
-      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-    />
-  </div>
-  <button
-    (click)="downloadCsvTemplate()"
-    class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 flex items-center gap-2"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-    </svg>
-    Stáhnout vzor CSV
-  </button>
-</div>
 
+        <!-- CSV Import -->
+        <div class="csv-container">
+          <div class="csv-form-group">
+            <label class="form-label">CSV Soubor</label>
+            <input
+              type="file"
+              accept=".csv"
+              (change)="importFromCsv($event)"
+              class="form-input"
+            />
+          </div>
+          <button
+            (click)="downloadCsvTemplate()"
+            class="btn btn-gray"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Stáhnout vzor CSV
+          </button>
+        </div>
 
         <!-- Kartičky -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div class="cards-grid">
           <div
             *ngFor="let card of flashcards; let i = index"
-            class="relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+            class="card"
           >
-            <div class="absolute top-2 right-2">
+            <div class="card-delete-btn">
               <button
                 (click)="deleteCard(i)"
-                class="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200 shadow-lg"
+                class="btn btn-danger"
               >
                 ×
               </button>
             </div>
-            <div class="p-6">
-              <p class="text-2xl font-medium text-gray-800 mb-4 text-center">
+            <div class="card-body">
+              <p class="card-title">
                 {{ card.czech }}
               </p>
 
-              <div *ngIf="!card.isAnswered" class="space-y-4">
+              <div *ngIf="!card.isAnswered" class="card-actions">
                 <input
                   [(ngModel)]="card.userAnswer"
                   placeholder="Napište anglický překlad..."
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  class="form-input"
                 />
                 <button
                   (click)="checkAnswer(i)"
-                  class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200"
+                  class="btn btn-green btn-full"
                 >
                   Zkontrolovat
                 </button>
               </div>
 
-              <div *ngIf="card.isAnswered" class="space-y-4">
-                <p class="text-center" [ngClass]="card.isCorrect ? 'text-green-600' : 'text-red-600'">
+              <div *ngIf="card.isAnswered" class="card-actions">
+                <p class="text-center" [ngClass]="card.isCorrect ? 'text-correct' : 'text-incorrect'">
                   {{ card.isCorrect ? 'Správně!' : 'Špatně!' }}
                 </p>
-                <p class="text-center text-gray-800">
+                <p class="text-center">
                   Správná odpověď: {{ card.english }}
                 </p>
                 <button
                   (click)="resetCard(i)"
-                  class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                  class="btn btn-blue btn-full"
                 >
                   Zkusit znovu
                 </button>
